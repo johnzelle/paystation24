@@ -1,0 +1,7 @@
+  accept legal coin
+  5 cents = 2 minutes time
+  reject illegal coin
+  read_display shows minutes
+  buy produces valid receipt
+  cancel resets paystation
+	

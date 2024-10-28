@@ -1,0 +1,11 @@
+X accept legal coin
+X 5 cents = 2 minutes time
+X reject illegal coin
+X read_display shows minutes
+X buy produces valid receipt
+X cancel resets paystation
+X 25 cents = 10 minutes
+X Handles multiple coins
+X Receipt store proper value
+X Handles transaction for $1.00
+X Buy clears display

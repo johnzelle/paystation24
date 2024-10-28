@@ -1,0 +1,30 @@
+Pay Station Stories
+-------------------
+
+
+1: Buy a parking permit
+
+   A car driver walks to the pay station to buy parking time. He
+   enters several valid coins (5, 10, and 25 cents) as pyament. For
+   each payment of 5 cents, he receives 2 minutes of parking time. On
+   the pay station's display, he can see how much time he has
+   purchased so far. Once he is satisfied with the amount of time, he
+   presses the button marked "Buy." He receives a printed receipt
+   stating the number of minutes of parking time he has bought. The
+   display is cleared to prepare for another transaction.
+
+
+2: Cancel a transaction
+
+   A driver has entered several coins but realizes that the
+   accumulated parking time exceeds what she needs. She presses the
+   button marked "Cancel" and her coins are returned. The display is
+   cleared to prepare for another transaction.
+
+
+3: Reject illegal coin
+
+   A driver has entered 50 cents total and the display reads "20". By
+   mistake, he enters a dollar coin which is not a recognized
+   coin. the paystation rejects the coin and the display is not
+   updated.
