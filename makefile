@@ -1,7 +1,7 @@
 # Build file for paystation project
 
 help:
-	echo targets: tests clean_src clean_test clean
+	echo targets: tests clean_src clean_test clean zip
 
 tests: 
 	python -m unittest
@@ -21,4 +21,4 @@ clean: clean_src clean_test
 	rm paystation.zip
 
 zip: clean
-	zip -r paystation.zip paystation test makefile
+	zip -r paystation.zip paystation test docs makefile
