@@ -8,13 +8,22 @@ class IllegalCoinException(Exception):
     """Exception for bad coins"""
 
 
+# Rate Strategies
+def linear_rate(amount):
+    return amount // 5 * 2
+
+
 class PayStation:
     """Implements the 'business logic' for parking pay station"""
 
     LEGAL_COINS = [5, 10, 25]
 
-    def __init__(self):
+    def __init__(self, rate_function):
+        self._calc_time = rate_function
         self._reset()
+
+    def _reset(self):
+        self._amount_inserted = 0
 
     def add_payment(self, coinvalue):
         """Adds coinvalue to paystation
@@ -29,7 +38,7 @@ class PayStation:
         """Give the number of minutes to display
 
         """
-        return self._amount_inserted // 5 * 2
+        return self._calc_time(self._amount_inserted)
 
     def buy(self):
         """Purchases parking time"""
@@ -43,9 +52,6 @@ class PayStation:
 
         self._reset()
 
-    def _reset(self):
-        self._amount_inserted = 0
-
 
 class Receipt:
     """Record of a pay station transaction"""
@@ -56,3 +62,5 @@ class Receipt:
     @property
     def value(self):
         return self._minutes
+
+
