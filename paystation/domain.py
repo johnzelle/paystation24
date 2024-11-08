@@ -12,6 +12,29 @@ class IllegalCoinException(Exception):
 def linear_rate(amount):
     return amount // 5 * 2
 
+def progressive_rate(cents):
+    """Minutes purchased using varying hourly rate
+
+    note: returns an int value
+
+    """
+    hour_1_rate = 150
+    hour_2_rate = 200
+    extended_hour_rate = 300
+
+    if cents <= hour_1_rate:  # get minutes of partial first hour
+        return round(cents / hour_1_rate * 60)
+
+    cents = cents - hour_1_rate  # purchase first full hour
+
+    if cents <= hour_2_rate:  # get 1 hour plus minutes of second hour
+        return 60 + round(cents / hour_2_rate * 60)
+
+    cents = cents - hour_2_rate  # purchase second full hour
+
+    # get 2 hours plus minutes of extended hours
+    return 120 + round(cents / extended_hour_rate * 60)
+
 
 class PayStation:
     """Implements the 'business logic' for parking pay station"""
