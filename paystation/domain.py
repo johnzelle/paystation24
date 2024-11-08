@@ -12,6 +12,7 @@ class IllegalCoinException(Exception):
 def linear_rate(amount):
     return amount // 5 * 2
 
+
 def progressive_rate(cents):
     """Minutes purchased using varying hourly rate
 
@@ -85,5 +86,3 @@ class Receipt:
     @property
     def value(self):
         return self._minutes
-
-
