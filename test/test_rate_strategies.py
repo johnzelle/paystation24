@@ -1,7 +1,12 @@
 # test_rate_strategies.py
 
 import unittest
-from paystation.domain import linear_rate, progressive_rate
+from datetime import datetime
+from paystation.domain import (
+    linear_rate,
+    progressive_rate,
+    AlternatingRate
+    )
 
 
 class TestLinearRate(unittest.TestCase):
@@ -37,3 +42,42 @@ class TestProgressiveRate(unittest.TestCase):
 
     def test_large_amount_10_hours_for_2750_cents(self):
         self.assertEqual(600, progressive_rate(2750))
+
+
+class TestAlternatingRate(unittest.TestCase):
+
+    def fake_weekday_rate(self, amount):
+        return 30
+
+    def fake_weekend_rate(self, amount):
+        return 60
+
+    def fake_datefn(self):
+        return self.fake_date
+
+    def setUp(self):
+        self.ars = AlternatingRate(self.fake_weekday_rate,
+                                   self.fake_weekend_rate,
+                                   self.fake_datefn)
+
+    def test_monday_uses_weekday_rate(self):
+        self.fake_date = datetime(2024, 11, 11)
+        self.assertEqual(30, self.ars(5))
+
+    def test_friday_uses_weekday_rate(self):
+        self.fake_date = datetime(2024, 11, 15)
+        self.assertEqual(30, self.ars(5))
+
+    def test_saturday_uses_weekend_rate(self):
+        self.fake_date = datetime(2024, 11, 16)
+        self.assertEqual(60, self.ars(5))
+
+    def test_sunday_uses_weekend_rate(self):
+        self.fake_date = datetime(2024, 11, 17)
+        self.assertEqual(60, self.ars(5))
+
+    def test_uses_system_clock(self):
+        ars = AlternatingRate(self.fake_weekday_rate,
+                              self.fake_weekend_rate)
+        self.assertIn(ars(5), [30, 60])
+        

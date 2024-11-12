@@ -3,6 +3,7 @@
 
 """
 
+from datetime import datetime
 
 class IllegalCoinException(Exception):
     """Exception for bad coins"""
@@ -36,6 +37,32 @@ def progressive_rate(cents):
     # get 2 hours plus minutes of extended hours
     return 120 + round(cents / extended_hour_rate * 60)
 
+
+class AlternatingRate:
+
+    """Rate strategy that allows different rates for Weekdays vs. Weekends
+
+    """
+    def __init__(self, weekday_rate, weekend_rate, datefunc=datetime.now):
+        """weekday_rate and weekend_rate are function_like objects having
+        signature: fn: cents --> minutes purchased
+
+        datefunc has signature: <empty> --> datetime
+
+        """
+        self._weekday_rate = weekday_rate
+        self._weekend_rate = weekend_rate
+        self._datefn = datefunc
+
+    def __call__(self, cents):
+        """return number of minutes purchase by cents
+
+        """
+        date = self._datefn()
+        if date.weekday() <= 4:
+            return self._weekday_rate(cents)
+        else:
+            return self._weekend_rate(cents)
 
 class PayStation:
     """Implements the 'business logic' for parking pay station"""
