@@ -11,10 +11,20 @@ from paystation.domain import (PayStation,
 def one_to_one_rate(amount):
     return amount
 
+class TestTownFactory:
+
+    def create_rate_strategy(self):
+        return one_to_one_rate
+
+    def create_receipt(self, amount):
+        return Receipt(amount)
+        
+
+
 class TestPayStation(unittest.TestCase):
 
     def setUp(self):
-        self.ps = PayStation(one_to_one_rate)
+        self.ps = PayStation(TestTownFactory())
 
     def add_test_coins(self, coins):
         for coin in coins:

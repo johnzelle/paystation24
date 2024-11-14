@@ -69,8 +69,8 @@ class PayStation:
 
     LEGAL_COINS = [5, 10, 25]
 
-    def __init__(self, rate_function):
-        self._calc_time = rate_function
+    def __init__(self, factory):
+        self._calc_time = factory.create_rate_strategy()
         self._reset()
 
     def _reset(self):
