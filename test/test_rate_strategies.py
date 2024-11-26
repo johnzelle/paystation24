@@ -3,10 +3,12 @@
 import unittest
 from datetime import datetime
 from paystation.domain import (
+    BasicRate,
     linear_rate,
     progressive_rate,
     AlternatingRate
     )
+
 
 
 class TestLinearRate(unittest.TestCase):
@@ -42,6 +44,27 @@ class TestProgressiveRate(unittest.TestCase):
 
     def test_large_amount_10_hours_for_2750_cents(self):
         self.assertEqual(600, progressive_rate(2750))
+
+
+class TestBasicRate(unittest.TestCase):
+
+    # Note: linear_rate and progressive rate are defined using BasicRate
+    #   These are additional tests to ensure the class generalizes to
+    #   other rate structures as well.
+
+    def test_alternate_flat_rate(self):
+        rs = BasicRate([200])
+        self.assertEqual(30, rs(100))
+        self.assertEqual(60, rs(200))
+        self.assertEqual(90, rs(300))
+
+    def test_alternate_progressive_rate(self):
+        rs = BasicRate([200, 300])
+        self.assertEqual(30, rs(100))
+        self.assertEqual(60, rs(200))
+        self.assertEqual(90, rs(350))
+        self.assertEqual(120, rs(500))
+        self.assertEqual(150, rs(650))
 
 
 class TestAlternatingRate(unittest.TestCase):
@@ -80,4 +103,3 @@ class TestAlternatingRate(unittest.TestCase):
         ars = AlternatingRate(self.fake_weekday_rate,
                               self.fake_weekend_rate)
         self.assertIn(ars(5), [30, 60])
-        

@@ -10,32 +10,26 @@ class IllegalCoinException(Exception):
 
 
 # Rate Strategies
-def linear_rate(amount):
-    return amount // 5 * 2
 
+class BasicRate:
 
-def progressive_rate(cents):
-    """Minutes purchased using varying hourly rate
+    def __init__(self, hourly_rates):
+        self._hourly_rates = hourly_rates
 
-    note: returns an int value
+    def __call__(self, cents):
+        minutes = 0
+        for rate in self._hourly_rates:
+            if cents >= rate:
+                minutes = minutes + 60
+                cents = cents - rate
+            else:
+                break
+        return minutes + round(cents/rate * 60)
 
-    """
-    hour_1_rate = 150
-    hour_2_rate = 200
-    extended_hour_rate = 300
-
-    if cents <= hour_1_rate:  # get minutes of partial first hour
-        return round(cents / hour_1_rate * 60)
-
-    cents = cents - hour_1_rate  # purchase first full hour
-
-    if cents <= hour_2_rate:  # get 1 hour plus minutes of second hour
-        return 60 + round(cents / hour_2_rate * 60)
-
-    cents = cents - hour_2_rate  # purchase second full hour
-
-    # get 2 hours plus minutes of extended hours
-    return 120 + round(cents / extended_hour_rate * 60)
+    
+# These two rates define for backwards compatibility
+linear_rate = BasicRate([150])
+progressive_rate = BasicRate([150, 200, 300])
 
 
 class AlternatingRate:
