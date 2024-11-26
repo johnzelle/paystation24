@@ -12,22 +12,35 @@ class IllegalCoinException(Exception):
 # Rate Strategies
 
 class BasicRate:
+    """Rate strategy based on a sequence of hourly rates"""
 
     def __init__(self, hourly_rates):
+        """hourly_rates is a list of rate (in cents) for successive hours
+
+        e.g. [150, 200, 300] indicates cost for the first, second, and
+             third hours. Subsequent hours are charged at the last
+             rate.
+
+        """
         self._hourly_rates = hourly_rates
 
     def __call__(self, cents):
+        """Return minutes purchased
+
+        """
         minutes = 0
         for rate in self._hourly_rates:
-            if cents >= rate:
+            if cents >= rate:  # purchase full hour
                 minutes = minutes + 60
                 cents = cents - rate
             else:
                 break
-        return minutes + round(cents/rate * 60)
+        # add minutes for any remaining cents at the last rate
+        minutes = minutes + round(cents/rate * 60)
+        return minutes
 
-    
-# These two rates define for backwards compatibility
+
+# These two rates are defined for backwards compatibility
 linear_rate = BasicRate([150])
 progressive_rate = BasicRate([150, 200, 300])
 
