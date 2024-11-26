@@ -3,7 +3,9 @@
 
 """
 
+import random
 from datetime import datetime
+
 
 class IllegalCoinException(Exception):
     """Exception for bad coins"""
@@ -71,12 +73,15 @@ class AlternatingRate:
         else:
             return self._weekend_rate(cents)
 
+
 class PayStation:
     """Implements the 'business logic' for parking pay station"""
 
     LEGAL_COINS = [5, 10, 25]
 
     def __init__(self, factory):
+        self.config_id = factory.config_id
+        self._factory = factory
         self._calc_time = factory.create_rate_strategy()
         self._reset()
 
@@ -101,7 +106,7 @@ class PayStation:
     def buy(self):
         """Purchases parking time"""
 
-        receipt = Receipt(self.minutes)
+        receipt = self._factory.create_receipt(self.minutes)
         self._reset()
         return receipt
 
@@ -114,9 +119,25 @@ class PayStation:
 class Receipt:
     """Record of a pay station transaction"""
 
-    def __init__(self, minutes):
+    template = \
+"""--------------------------------------------------
+-------  P A R K I N G   R E C E I P T     -------
+                Value {:03d} minutes.
+              Car parked at {:02d}:{:02d}
+--------------------------------------------------"""
+
+    def __init__(self, minutes, barcode=False):
         self._minutes = minutes
+        self.with_barcode = barcode
 
     @property
     def value(self):
         return self._minutes
+
+    def print(self, stream):
+        now = datetime.now()
+        output = self.template.format(self.value, now.hour, now.minute)
+        print(output, file=stream)
+        if self.with_barcode:
+            barcode = "".join([random.choice(" ||") for _ in range(50)])
+            print(barcode, file=stream)

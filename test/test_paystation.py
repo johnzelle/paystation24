@@ -13,6 +13,8 @@ def one_to_one_rate(amount):
 
 class TestTownFactory:
 
+    config_id = "testtown"
+
     def create_rate_strategy(self):
         return one_to_one_rate
 
@@ -54,10 +56,6 @@ class TestPayStation(unittest.TestCase):
         self.add_test_coins([5, 10, 25])
         receipt = self.ps.buy()
         self.assertEqual(5 + 10 + 25, receipt.value)
-
-    def test_receipt_stores_proper_value(self):
-        receipt = Receipt(30)
-        self.assertEqual(30, receipt.value)
 
     def test_proper_receipt_for_1_dollar(self):
         self.add_test_coins([10, 10, 10, 10, 10, 25, 25,])

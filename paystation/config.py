@@ -10,6 +10,8 @@ from paystation.domain import (linear_rate,
 
 class AlphaTownFactory:
 
+    config_id = "alphatown"
+
     def create_rate_strategy(self):
         return linear_rate
 
@@ -19,14 +21,18 @@ class AlphaTownFactory:
 
 class BetaTownFactory:
 
+    config_id = "betatown"
+
     def create_rate_strategy(self):
         return progressive_rate
 
     def create_receipt(self, amount):
-        return Receipt(amount)
+        return Receipt(amount, barcode=True)
 
 
 class GammaTownFactory:
+
+    config_id = "gammatown"
 
     def create_rate_strategy(self):
         return AlternatingRate(linear_rate, progressive_rate)
@@ -37,6 +43,8 @@ class GammaTownFactory:
 
 class TripoliFactory:
 
+    config_id = "tripoli"
+
     def create_rate_strategy(self):
         return BasicRate([200])
 
@@ -45,6 +53,8 @@ class TripoliFactory:
 
 
 class HortonFactory:
+
+    config_id = "horton"
 
     def create_rate_strategy(self):
         return BasicRate([75, 150, 200])
